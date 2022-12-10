@@ -15,7 +15,7 @@ finish-args:
 
 modules:
   - name: marble-marcher
-    buildsystem: cmake
+    buildsystem: cmake-ninja
     builddir: true
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
@@ -40,7 +40,7 @@ modules:
           - -DCMAKE_BUILD_TYPE=Release
         sources:
           - type: git
-            tag: "2.5.0"
+            tag: "2.5.1"
             url: https://github.com/SFML/SFML.git
       - name: glm
         buildsystem: cmake-ninja
