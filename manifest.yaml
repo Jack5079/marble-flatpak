@@ -1,0 +1,73 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/flatpak/flatpak-builder/main/data/flatpak-manifest.schema.json
+id: com.github.WAUthethird.Marble-Marcher-Community-Edition
+runtime: org.freedesktop.Platform
+runtime-version: "22.08"
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Platform.GL.default
+command: marble-marcher
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --socket=pulseaudio
+
+modules:
+  - name: marble-marcher
+    buildsystem: cmake
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: git
+        branch: master
+        url: https://github.com/WAUthethird/Marble-Marcher-Community-Edition.git
+    modules:
+      - shared-modules/glew/glew.json
+      # somehow, it isn't finding eigen or anttweakbar
+      - name: eigen
+        builddir: true
+        sources:
+          - type: git
+            tag: "3.3.7"
+            url: https://gitlab.com/libeigen/eigen.git
+        buildsystem: cmake
+      - name: sfml
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+          - -DCMAKE_BUILD_TYPE=Release
+        sources:
+          - type: git
+            tag: "2.5.0"
+            url: https://github.com/SFML/SFML.git
+      - name: glm
+        buildsystem: cmake-ninja
+        builddir: true
+        config-opts:
+          - -DCMAKE_BUILD_TYPE=Release
+        sources:
+          - type: git
+            branch: master
+            url: https://github.com/g-truc/glm.git
+      - name: anttweakbar
+        buildsystem: cmake-ninja
+        builddir: true
+        sources:
+          - type: git
+            branch: master
+            url: https://github.com/tschw/AntTweakBar # A fork that adds CMake support
+        modules:
+          - name: glu
+            buildsystem: autotools
+            builddir: true
+            config-opts:
+              - --disable-static
+            sources:
+              - type: git
+                branch: master
+                url: https://gitlab.freedesktop.org/mesa/glu.git
+            build-commands:
+              - make -j $FLATPAK_BUILDER_N_JOBS
+              - make install

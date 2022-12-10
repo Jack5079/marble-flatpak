@@ -1,0 +1,10 @@
+{
+	"yaml.schemas": [
+		{
+			"fileMatch": [
+				"/manifest.yaml"
+			],
+			"url": "https://raw.githubusercontent.com/flatpak/flatpak-builder/main/data/flatpak-manifest.schema.json"
+		}
+	]
+}
